@@ -4,4 +4,4 @@ before_install:
   - chmod +x ./gradlew
 install:
   - ./gradlew :codeview:core:publishToMavenLocal
-  - ./gradlew :codeview:ui:publishToMavenLocal
+  - ./gradlew :codeview:compose:publishToMavenLocal
