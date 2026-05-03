@@ -1,0 +1,7 @@
+jdk:
+  - openjdk21
+before_install:
+  - chmod +x ./gradlew
+install:
+  - ./gradlew :codeview:core:publishToMavenLocal
+  - ./gradlew :codeview:ui:publishToMavenLocal
