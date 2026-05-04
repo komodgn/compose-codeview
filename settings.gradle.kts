@@ -30,3 +30,4 @@ dependencyResolutionManagement {
 
 include(":codeview:compose")
 include(":codeview:core")
+include(":example")
