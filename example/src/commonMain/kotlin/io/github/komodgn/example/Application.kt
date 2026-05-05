@@ -92,6 +92,7 @@ fun EditorSection(code: String, onValueChange: (String) -> Unit, modifier: Modif
             value = code,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
+            label = { Text("Code") },
             textStyle = MaterialTheme.typography.bodyMedium,
         )
     }
