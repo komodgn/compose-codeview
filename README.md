@@ -1,5 +1,15 @@
-# CodeView
-[![](https://jitpack.io/v/komodgn/compose-codeview.svg)](https://jitpack.io/#komodgn/compose-codeview) <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-purple.svg"/></a>
+<div align="center">
+    <h1>CodeView</h1>
+    <p>🎨 Beautiful Syntax Highlighting for your Compose apps. Display code everywhere with CodeView.</p>
+    <img width="700" alt="Group 10 (1)" src="https://github.com/user-attachments/assets/346b3b3a-5d67-4d3c-a003-30fde3d22346" />
+    <br>
+    <a href="https://jitpack.io/#komodgn/compose-codeview">
+        <img src="https://jitpack.io/v/komodgn/compose-codeview.svg" alt="JitPack Version">
+    </a>
+    <a href="https://opensource.org/licenses/Apache-2.0">
+        <img src="https://img.shields.io/badge/License-Apache%202.0-purple.svg" alt="License">
+    </a>
+</div>
 
 ## Setup
 Add the dependency below to your module's build.gradle.kts file.
