@@ -15,6 +15,8 @@
  */
 package io.github.komodgn.example
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,27 +30,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.komodgn.AppConfig
-import io.github.komodgn.codeview.compose.CodeView
-import io.github.komodgn.codeview.core.CodeLanguage
+import io.github.komodgn.example.component.CodeViewSection
+import io.github.komodgn.example.component.EditorSection
+import io.github.komodgn.example.theme.CodeViewTheme
 
 @Composable
 fun App() {
     var userInput by remember { mutableStateOf(getInitialCode(AppConfig.LIBRARY_VERSION)) }
     val scrollState = rememberScrollState()
 
-    MaterialTheme {
+    CodeViewTheme {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize(),
@@ -58,6 +59,7 @@ fun App() {
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize()
+                    .background(Color.White)
                     .statusBarsPadding()
                     .displayCutoutPadding()
                     .navigationBarsPadding()
@@ -70,6 +72,7 @@ fun App() {
                         .fillMaxWidth()
                         .verticalScroll(scrollState)
                         .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     if (isCompact) {
                         CodeViewSection(userInput, modifier = Modifier.fillMaxWidth())
@@ -86,38 +89,18 @@ fun App() {
     }
 }
 
-@Composable
-fun EditorSection(code: String, onValueChange: (String) -> Unit, modifier: Modifier) {
-    Column(modifier = modifier.padding(8.dp)) {
-        Text("Edit Code", style = MaterialTheme.typography.labelLarge)
-        TextField(
-            value = code,
-            onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("Code") },
-            textStyle = MaterialTheme.typography.bodyMedium,
-        )
-    }
-}
-
-@Composable
-fun CodeViewSection(code: String, modifier: Modifier) {
-    Column(modifier = modifier.padding(8.dp)) {
-        Text("Preview", style = MaterialTheme.typography.labelLarge)
-        CodeView(
-            code = code,
-            language = CodeLanguage.KOTLIN,
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
-}
-
 private fun getInitialCode(version: String) = """
 package io.github.komodgn.example
 
+/**
+ * Welcome to Compose CodeView v$version Demo!
+ *
+ * This library provides syntax highlighting for Compose Multiplatform.
+ * Feel free to edit the code on the left to see real-time updates.
+ */
 @Composable
 fun CodeDisplay() {
-    val greeting = "Hello, CodeView! 🎉v$version"
+    val greeting = println("Hello, CodeView!")
 
     CodeView(
         code = greeting,
