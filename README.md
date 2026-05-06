@@ -15,7 +15,7 @@
 ## Table of contents
 1. [Setup](#setup)
 2. [Usage](#usage)
-3. [Contributing](#contributing)
+3. [Contributing](#-contributing)
 
 ## Setup
 Add the dependency below to your module's build.gradle.kts file.
