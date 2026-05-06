@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.example.component
+package io.github.komodgn.example.section
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,12 +27,16 @@ import io.github.komodgn.codeview.core.CodeLanguage
 import io.github.komodgn.example.theme.LocalAppFontFamily
 
 @Composable
-fun CodeViewSection(code: String, modifier: Modifier) {
+fun CodeViewSection(
+    code: String,
+    language: CodeLanguage,
+    modifier: Modifier,
+) {
     Column(modifier = modifier.padding(8.dp)) {
         Text("Preview", modifier = Modifier.padding(4.dp))
         CodeView(
             code = code,
-            language = CodeLanguage.KOTLIN,
+            language = language,
             modifier = Modifier.fillMaxWidth(),
             fontFamily = LocalAppFontFamily.current,
         )
