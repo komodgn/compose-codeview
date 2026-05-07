@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.example.component
+package io.github.komodgn.example.section
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -23,15 +25,40 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.github.komodgn.codeview.core.CodeLanguage
+import io.github.komodgn.example.component.LanguageDropDown
 import io.github.komodgn.example.theme.LocalAppFontFamily
 
 @Composable
-fun EditorSection(code: String, onValueChange: (String) -> Unit, modifier: Modifier) {
+fun EditorSection(
+    code: String,
+    selectedLanguage: CodeLanguage,
+    onLanguageChange: (CodeLanguage) -> Unit,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier,
+) {
     Column(modifier = modifier.padding(8.dp)) {
-        Text("Edit Code", modifier = Modifier.padding(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = "Edit Code",
+                style = MaterialTheme.typography.titleMedium,
+            )
+
+            LanguageDropDown(
+                selectedLanguage = selectedLanguage,
+                onLanguageChange = onLanguageChange,
+            )
+        }
         TextField(
             value = code,
             onValueChange = onValueChange,
@@ -40,7 +67,12 @@ fun EditorSection(code: String, onValueChange: (String) -> Unit, modifier: Modif
                 fontFamily = LocalAppFontFamily.current,
             ),
             colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Blue.copy(0.3f),
                 focusedContainerColor = Color.Blue.copy(0.3f),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent,
             ),
         )
     }

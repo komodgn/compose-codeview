@@ -40,13 +40,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.komodgn.AppConfig
-import io.github.komodgn.example.component.CodeViewSection
-import io.github.komodgn.example.component.EditorSection
+import io.github.komodgn.codeview.core.CodeLanguage
+import io.github.komodgn.example.section.CodeViewSection
+import io.github.komodgn.example.section.EditorSection
 import io.github.komodgn.example.theme.CodeViewTheme
+import io.github.komodgn.example.util.getInitialCode
 
 @Composable
 fun App() {
-    var userInput by remember { mutableStateOf(getInitialCode(AppConfig.LIBRARY_VERSION)) }
+    var currentLang by remember { mutableStateOf(CodeLanguage.KOTLIN) }
+    var userInput by remember { mutableStateOf(getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)) }
     val scrollState = rememberScrollState()
 
     CodeViewTheme {
@@ -75,12 +78,38 @@ fun App() {
                     verticalArrangement = Arrangement.Center,
                 ) {
                     if (isCompact) {
-                        CodeViewSection(userInput, modifier = Modifier.fillMaxWidth())
-                        EditorSection(userInput, onValueChange = { userInput = it }, modifier = Modifier.fillMaxWidth())
+                        CodeViewSection(
+                            code = userInput,
+                            language = currentLang,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        EditorSection(
+                            code = userInput,
+                            selectedLanguage = currentLang,
+                            onLanguageChange = { newLang ->
+                                currentLang = newLang
+                                userInput = getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)
+                            },
+                            onValueChange = { userInput = it },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
                     } else {
                         Row(modifier = Modifier.fillMaxWidth().padding(16.dp, 0.dp, 16.dp, 0.dp)) {
-                            EditorSection(userInput, onValueChange = { userInput = it }, modifier = Modifier.weight(1f))
-                            CodeViewSection(userInput, modifier = Modifier.weight(1f))
+                            EditorSection(
+                                code = userInput,
+                                selectedLanguage = currentLang,
+                                onLanguageChange = { newLang ->
+                                    currentLang = newLang
+                                    userInput = getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)
+                                },
+                                onValueChange = { userInput = it },
+                                modifier = Modifier.weight(1f),
+                            )
+                            CodeViewSection(
+                                code = userInput,
+                                language = currentLang,
+                                modifier = Modifier.weight(1f),
+                            )
                         }
                     }
                 }
@@ -88,23 +117,3 @@ fun App() {
         }
     }
 }
-
-private fun getInitialCode(version: String) = """
-package io.github.komodgn.example
-
-/**
- * Welcome to Compose CodeView v$version Demo!
- *
- * This library provides syntax highlighting for Compose Multiplatform.
- * Feel free to edit the code on the left to see real-time updates.
- */
-@Composable
-fun CodeDisplay() {
-    val greeting = println("Hello, CodeView!")
-
-    CodeView(
-        code = greeting,
-        language = CodeLanguage.KOTLIN,
-    )
-}
-""".trimIndent()

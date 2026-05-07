@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.codeview.core
+package io.github.komodgn.codeview.core.languages
 
-enum class CodeLanguage {
-    JAVA,
-    KOTLIN,
-    PYTHON,
+import io.github.komodgn.codeview.core.languages.base.ScriptLanguageDefinition
+
+object PythonDefinition : ScriptLanguageDefinition() {
+    override val name = "python"
+
+    override val keywords = commonScriptKeywords + setOf(
+        "def", "class", "elif", "try", "except", "finally", "raise",
+        "with", "as", "pass", "import", "from", "lambda", "assert",
+        "is", "not", "and", "or", "global", "nonlocal", "del",
+    )
 }

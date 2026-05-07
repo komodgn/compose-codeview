@@ -15,6 +15,8 @@
  */
 package io.github.komodgn.codeview.core
 
+import io.github.komodgn.codeview.core.languages.base.LanguageDefinition
+
 data class HighlightToken(
     val range: IntRange,
     val type: TokenType,
@@ -26,43 +28,31 @@ object SyntaxParser {
     fun parse(code: String, definition: LanguageDefinition): List<HighlightToken> {
         val tokens = mutableListOf<HighlightToken>()
 
-        val multiLineCommentRegex = Regex("""/\*[\s\S]*?\*/""")
-        val singleLineCommentRegex = Regex("""//.*""")
-
-        multiLineCommentRegex.findAll(code).forEach {
-            tokens.add(HighlightToken(it.range, TokenType.COMMENT))
-        }
-
-        singleLineCommentRegex.findAll(code).forEach { match ->
-            if (tokens.none { it.range.contains(match.range.first) }) {
-                tokens.add(HighlightToken(match.range, TokenType.COMMENT))
-            }
-        }
-
-        val stringRegex = Regex(""""([^"\\]|\\.)*"""")
-        stringRegex.findAll(code).forEach { match ->
-            if (tokens.none { it.range.contains(match.range.first) }) {
-                tokens.add(HighlightToken(match.range, TokenType.STRING))
+        definition.getCustomRules().forEach { (type, regex) ->
+            regex.findAll(code).forEach { match ->
+                if (tokens.none { it.range.overlaps(match.range) }) {
+                    tokens.add(HighlightToken(match.range, type))
+                }
             }
         }
 
         val typeRegex = Regex("""\b[A-Z]\w*\b""")
         typeRegex.findAll(code).forEach { match ->
-            if (tokens.none { it.range.contains(match.range.first) }) {
+            if (tokens.none { it.range.overlaps(match.range) }) {
                 tokens.add(HighlightToken(match.range, TokenType.TYPE))
             }
         }
 
         val functionRegex = Regex("""\b\w+(?=\s*\()""")
         functionRegex.findAll(code).forEach { match ->
-            if (tokens.none { it.range.contains(match.range.first) }) {
+            if (tokens.none { it.range.overlaps(match.range) }) {
                 tokens.add(HighlightToken(match.range, TokenType.FUNCTION))
             }
         }
 
         val wordRegex = Regex("""\b(\w+)\b""")
         wordRegex.findAll(code).forEach { match ->
-            if (tokens.none { it.range.contains(match.range.first) }) {
+            if (tokens.none { it.range.overlaps(match.range) }) {
                 if (match.value in definition.keywords) {
                     tokens.add(HighlightToken(match.range, TokenType.KEYWORD))
                 }
@@ -71,4 +61,10 @@ object SyntaxParser {
 
         return tokens.sortedBy { it.range.first }
     }
+
+    /**
+     * Checks if this range overlaps with the [other] range.
+     * @return true if there is at least one common element between the two ranges.
+     */
+    private fun IntRange.overlaps(other: IntRange): Boolean = this.first <= other.last && other.first <= this.last
 }

@@ -21,8 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import compose_codeview.example.generated.resources.NotoColorEmoji
+import compose_codeview.example.generated.resources.NotoSansKR_Regular
 import compose_codeview.example.generated.resources.Res
-import compose_codeview.example.generated.resources.*
 import org.jetbrains.compose.resources.Font
 
 @Composable
