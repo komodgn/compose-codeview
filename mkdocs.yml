@@ -35,7 +35,8 @@ nav:
   - 'Overview': index.md
   - 'Setup': setup.md
   - 'CodeView':
-      - 'Overview': codeView/overview.md
+      - 'Overview': codeview/overview.md
+      - 'Language Support': codeview/languages.md
 
 markdown_extensions:
   - admonition
@@ -63,5 +64,10 @@ plugins:
   - macros
   - minify:
       minify_html: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/komodgn/compose-codeview
 
 copyright: '&copy; 2026 komodgn'

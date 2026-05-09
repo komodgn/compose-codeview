@@ -1,6 +1,6 @@
 <div align="center">
     <h1>CodeView</h1>
-    <p>👻 <a href="https://komodgn.github.io/compose-codeview/">Live Playground</a></p>
+    <p>👻 <a href="https://komodgn.github.io/compose-codeview/demo">Live Playground</a></p>
     <p>🎨 Beautiful Syntax Highlighting for your Compose apps. Display code everywhere with CodeView.</p>
     <img width="700" alt="Group 10 (1)" src="https://github.com/user-attachments/assets/346b3b3a-5d67-4d3c-a003-30fde3d22346" />
     <br>
