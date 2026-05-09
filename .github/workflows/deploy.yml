@@ -1,9 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  pull_request:
   push:
-    branches: [ develop ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -29,8 +28,25 @@ jobs:
       - name: Build Wasm
         run: ./gradlew :example:wasmJsBrowserDistribution
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install MkDocs dependencies
+        run: |
+          pip install mkdocs-material pillow cairosvg mkdocs-minify-plugin mkdocs-macros-plugin
+
+      - name: Build Docs
+        run: mkdocs build
+
+      - name: Merge Wasm into Docs
+        run: |
+          mkdir -p site/demo
+          cp -r example/build/dist/wasmJs/productionExecutable/* site/demo/
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: example/build/dist/wasmJs/productionExecutable
+          folder: site
           branch: gh-pages
