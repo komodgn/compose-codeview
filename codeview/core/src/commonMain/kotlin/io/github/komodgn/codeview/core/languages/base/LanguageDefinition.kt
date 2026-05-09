@@ -13,27 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.codeview.core
+package io.github.komodgn.codeview.core.languages.base
+
+import io.github.komodgn.codeview.core.TokenType
 
 interface LanguageDefinition {
     val keywords: Set<String>
     val name: String
 
     fun getCustomRules(): Map<TokenType, Regex> = emptyMap()
-}
-
-object KotlinDefinition : LanguageDefinition {
-    override val name = "kotlin"
-    override val keywords = setOf(
-        "package", "import", "class", "object", "fun", "val", "var",
-        "if", "else", "for", "while", "return", "when", "is", "in", "interface",
-    )
-}
-
-object JavaDefinition : LanguageDefinition {
-    override val name = "java"
-    override val keywords = setOf(
-        "public", "private", "protected", "static", "final", "class", "interface",
-        "if", "else", "for", "while", "return", "try", "catch", "new",
-    )
 }

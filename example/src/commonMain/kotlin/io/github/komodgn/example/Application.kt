@@ -15,63 +15,104 @@
  */
 package io.github.komodgn.example
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.komodgn.AppConfig
-import io.github.komodgn.codeview.compose.CodeView
 import io.github.komodgn.codeview.core.CodeLanguage
+import io.github.komodgn.example.section.CodeViewSection
+import io.github.komodgn.example.section.EditorSection
+import io.github.komodgn.example.theme.CodeViewTheme
+import io.github.komodgn.example.util.getInitialCode
 
 @Composable
 fun App() {
+    var currentLang by remember { mutableStateOf(CodeLanguage.KOTLIN) }
+    var userInput by remember { mutableStateOf(getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)) }
     val scrollState = rememberScrollState()
 
-    val demoCode = """
-    package io.github.komodgn.example
-
-    /**
-     * CodeView enables seamless syntax highlighting within KMP projects.
-     * It efficiently handles multi-line documentation and complex annotations.
-     */
-    @Composable
-    fun CodeDisplay(version: String) {
-        // You can integrate dynamic string interpolation effortlessly
-        val greeting = "Hello, CodeView ${AppConfig.LIBRARY_VERSION} version"
-
-        /*
-           Block comment support:
-           Developers can verify the accuracy of color rendering
-           for improved code readability.
-        */
-        CodeView(
-            code = greeting,
-            language = CodeLanguage.KOTLIN,
-        )
-    }
-    """.trimIndent()
-
-    MaterialTheme {
+    CodeViewTheme {
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
         ) { innerPadding ->
-            Column(
+            BoxWithConstraints(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .padding(16.dp)
                     .fillMaxSize()
-                    .verticalScroll(scrollState),
+                    .background(Color.White)
+                    .statusBarsPadding()
+                    .displayCutoutPadding()
+                    .navigationBarsPadding()
+                    .imePadding(),
             ) {
-                CodeView(
-                    code = demoCode,
-                    language = CodeLanguage.KOTLIN,
-                )
+                val isCompact = maxWidth < 600.dp
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    if (isCompact) {
+                        CodeViewSection(
+                            code = userInput,
+                            language = currentLang,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        EditorSection(
+                            code = userInput,
+                            selectedLanguage = currentLang,
+                            onLanguageChange = { newLang ->
+                                currentLang = newLang
+                                userInput = getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)
+                            },
+                            onValueChange = { userInput = it },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    } else {
+                        Row(modifier = Modifier.fillMaxWidth().padding(16.dp, 0.dp, 16.dp, 0.dp)) {
+                            EditorSection(
+                                code = userInput,
+                                selectedLanguage = currentLang,
+                                onLanguageChange = { newLang ->
+                                    currentLang = newLang
+                                    userInput = getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)
+                                },
+                                onValueChange = { userInput = it },
+                                modifier = Modifier.weight(1f),
+                            )
+                            CodeViewSection(
+                                code = userInput,
+                                language = currentLang,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                    }
+                }
             }
         }
     }

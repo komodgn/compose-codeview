@@ -13,10 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.codeview.core
+package io.github.komodgn.codeview.core.languages.base
 
-enum class CodeLanguage {
-    JAVA,
-    KOTLIN,
-    PYTHON,
+import io.github.komodgn.codeview.core.TokenType
+
+abstract class ScriptLanguageDefinition : LanguageDefinition {
+    protected val commonScriptKeywords = setOf(
+        "if", "else", "while", "for", "in", "return", "yield", "break", "continue", "true", "false", "None",
+    )
+
+    override fun getCustomRules(): Map<TokenType, Regex> = mapOf(
+        TokenType.COMMENT to Regex("#.*"),
+        TokenType.STRING to Regex("f?\"\"\"[\\s\\S]*?\"\"\"|f?\".*?\"|f?'''.*?'''|f?'.*?'"),
+    )
 }

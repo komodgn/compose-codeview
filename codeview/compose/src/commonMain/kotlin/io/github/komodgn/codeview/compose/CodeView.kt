@@ -39,6 +39,7 @@ fun CodeView(
     code: String,
     language: CodeLanguage,
     modifier: Modifier = Modifier,
+    fontFamily: FontFamily? = null,
 ) {
     val tokens = SyntaxParser.parse(code, language.toDefinition())
 
@@ -62,7 +63,7 @@ fun CodeView(
                 text = annotatedString,
                 color = Color.White,
                 fontSize = 14.sp,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = fontFamily ?: FontFamily.Monospace,
                 lineHeight = 20.sp,
             )
         }

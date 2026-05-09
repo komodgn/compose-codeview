@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.codeview.core
+package io.github.komodgn.example.theme
 
-enum class CodeLanguage {
-    JAVA,
-    KOTLIN,
-    PYTHON,
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.text.font.FontFamily
+
+val LocalAppFontFamily = staticCompositionLocalOf<FontFamily> {
+    FontFamily.Default
 }

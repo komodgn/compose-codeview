@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.codeview.core.extension
+package io.github.komodgn.codeview.core.languages
 
-import io.github.komodgn.codeview.core.CodeLanguage
-import io.github.komodgn.codeview.core.languages.JavaDefinition
-import io.github.komodgn.codeview.core.languages.KotlinDefinition
-import io.github.komodgn.codeview.core.languages.PythonDefinition
-import io.github.komodgn.codeview.core.languages.base.LanguageDefinition
+import io.github.komodgn.codeview.core.languages.base.CLikeLanguageDefinition
+import kotlin.collections.plus
 
-fun CodeLanguage.toDefinition(): LanguageDefinition = when (this) {
-    CodeLanguage.KOTLIN -> KotlinDefinition
-    CodeLanguage.JAVA -> JavaDefinition
-    CodeLanguage.PYTHON -> PythonDefinition
+object JavaDefinition : CLikeLanguageDefinition() {
+    override val name = "java"
+
+    override val keywords = commonKeywords + setOf(
+        "void", "boolean", "char", "byte", "short", "int", "long", "float", "double",
+        "synchronized", "volatile", "transient", "native", "strictfp",
+        "enum", "record", "extends", "implements", "throws", "instanceof",
+        "assert", "yield", "var", "permits", "non-sealed",
+    )
 }

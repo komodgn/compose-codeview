@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.codeview.core
+package io.github.komodgn.example
 
-enum class CodeLanguage {
-    JAVA,
-    KOTLIN,
-    PYTHON,
-}
+actual fun platform() = "Web with JS"
