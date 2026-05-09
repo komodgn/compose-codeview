@@ -1,8 +1,10 @@
-## Setup
-Add the dependency below to your module's build.gradle.kts file.
+<a href="https://jitpack.io/#komodgn/compose-codeview">
+   <img src="https://jitpack.io/v/komodgn/compose-codeview.svg" alt="JitPack Version">
+</a> 
+<br>
 
-1. Add Repository
-   Add the JitPack repository to your root settings.gradle.kts:
+## JitPack Setup
+Add the JitPack repository to your root settings.gradle.kts:
 
 ```Kotlin
 dependencyResolutionManagement {
@@ -14,8 +16,8 @@ dependencyResolutionManagement {
 }
 ```
 
-2. Add Dependency
-- If you are using libs.versions.toml:
+## Version Catalog
+If you are using libs.versions.toml:
 
 ```toml
 [versions]
@@ -26,18 +28,20 @@ compose-codeview-core = { module = "com.github.komodgn.compose-codeview:core", v
 compose-codeview = { module = "com.github.komodgn.compose-codeview:compose", version.ref = "composeCodeview" }
 ```
 
-- Then, add the dependency to your build.gradle.kts:
+## Gradle Setup
+Add the dependency below to your module's build.gradle.kts file.
 
+### For KMP (commonMain)
 ```Kotlin
-// For KMP (commonMain)
 sourceSets {
     commonMain.dependencies {
         implementation(libs.compose.codeview.core)
         implementation(libs.compose.codeview)
     }
 }
-
-// For Android-only projects
+```
+### For Android-only projects
+```Kotlin
 dependencies {
     implementation(libs.compose.codeview.core)
     implementation(libs.compose.codeview)
