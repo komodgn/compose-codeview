@@ -28,9 +28,9 @@ fun CodeViewerExample() {
 
 ### Parameters
 
-| Parameter    | Type           | Default | Description                                                                 |
-|--------------|----------------|-------|-----------------------------------------------------------------------------|
-| `code`       | `String`       | (Required) | The source code string to be highlighted. |
-| `language`   | `CodeLanguage` | (Required) | The programming language to use for syntax analysis (e.g., KOTLIN, JAVA). |
-| `modifier`   | `Modifier`     | `Modifier` | The modifier to be applied to the layout (padding, background, etc.). |
-| `fontFamily` | `FontFamily`   | `null` | The font family to be applied to the code text. Monospace is recommended. |
+| PARAMETER    | TYPE           | DESCRIPTION                                                                      | DEFAULT    |
+|--------------|----------------|----------------------------------------------------------------------------------|------------|
+| `code`       | `String`       | The source code string to be highlighted.                                        | (Required) |
+| `language`   | `CodeLanguage` | The programming language to use for syntax analysis (e.g., `KOTLIN`, `JAVA`).    | (Required) |
+| `modifier`   | `Modifier`     | The modifier to be applied to the CodeView container.                            | `Modifier` |
+| `fontFamily` | `FontFamily?`  | The font family for the code text. If null, it defaults to FontFamily.Monospace. | `null`     |
