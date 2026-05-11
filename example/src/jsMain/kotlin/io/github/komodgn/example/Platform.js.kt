@@ -21,4 +21,3 @@ actual fun platform() = "Web with JS"
 
 @Composable
 actual fun PlatformColors(isDarkTheme: Boolean) {}
-
