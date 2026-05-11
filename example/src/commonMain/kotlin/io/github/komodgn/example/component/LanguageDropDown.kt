@@ -62,7 +62,8 @@ fun LanguageDropDown(
             Text(
                 text = selectedLanguage.name,
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
             )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
@@ -83,6 +84,8 @@ fun LanguageDropDown(
                         Text(
                             text = language.name,
                             style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (language == selectedLanguage) FontWeight.Bold else FontWeight.Normal,
+                            color = if (language == selectedLanguage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     },
                     onClick = {

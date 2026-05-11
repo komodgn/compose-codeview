@@ -20,17 +20,16 @@ import io.github.komodgn.codeview.core.CodeLanguage
 /**
  * Provides the initial code snippet for the demo application.
  */
-fun getInitialCode(language: CodeLanguage, version: String): String {
-    return when (language) {
-        CodeLanguage.KOTLIN -> """
+fun getInitialCode(language: CodeLanguage, version: String): String = when (language) {
+    CodeLanguage.KOTLIN -> """
             package io.github.komodgn.example
-            
+
             /**
              * Welcome to Compose CodeView v$version Demo!
              *
              * This library provides syntax highlighting for Compose Multiplatform.
              * Feel free to edit the code on the left to see real-time updates.
-             */  
+             */
             @Composable
             fun CodeDisplay() {
                 val greeting = getWelcomeMessage()
@@ -41,11 +40,11 @@ fun getInitialCode(language: CodeLanguage, version: String): String {
                     language = CodeLanguage.KOTLIN,
                 )
             }
-            
-            private fun getWelcomeMessage() = "Hello, CodeView!"
-        """.trimIndent()
 
-        CodeLanguage.JAVA -> """
+            private fun getWelcomeMessage() = "Hello, CodeView!"
+    """.trimIndent()
+
+    CodeLanguage.JAVA -> """
             package io.github.komodgn.example;
 
             /**
@@ -57,17 +56,16 @@ fun getInitialCode(language: CodeLanguage, version: String): String {
                     System.out.println(message);
                 }
             }
-        """.trimIndent()
+    """.trimIndent()
 
-        CodeLanguage.PYTHON -> """
+    CodeLanguage.PYTHON -> """
             # Welcome to Compose CodeView v$version!
-            
+
             def welcome_codeview():
                 message = "Hello, Python!"
                 print(message)
 
             if __name__ == "__main__":
                 welcome_codeview()
-        """.trimIndent()
-    }
+    """.trimIndent()
 }

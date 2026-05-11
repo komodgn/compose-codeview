@@ -15,4 +15,9 @@
  */
 package io.github.komodgn.example
 
+import androidx.compose.runtime.Composable
+
 actual fun platform() = "Web with Kotlin/Wasm"
+
+@Composable
+actual fun PlatformColors(isDarkTheme: Boolean) {}

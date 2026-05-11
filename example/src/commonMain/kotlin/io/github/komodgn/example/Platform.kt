@@ -15,4 +15,9 @@
  */
 package io.github.komodgn.example
 
+import androidx.compose.runtime.Composable
+
 expect fun platform(): String
+
+@Composable
+expect fun PlatformColors(isDarkTheme: Boolean)
