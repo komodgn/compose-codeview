@@ -90,12 +90,13 @@ fun CodeViewerExample() {
 
 #### Parameters
 
-| PARAMETER    | TYPE           | DESCRIPTION                                                                      | DEFAULT    |
-|--------------|----------------|----------------------------------------------------------------------------------|------------|
-| `code`       | `String`       | The source code string to be highlighted.                                        | (Required) |
-| `language`   | `CodeLanguage` | The programming language to use for syntax analysis (e.g., `KOTLIN`, `JAVA`).    | (Required) |
-| `modifier`   | `Modifier`     | The modifier to be applied to the CodeView container.                            | `Modifier` |
-| `fontFamily` | `FontFamily?`  | The font family for the code text. If null, it defaults to FontFamily.Monospace. | `null`     |
+| PARAMETER         | TYPE           | DESCRIPTION                                                                      | DEFAULT    |
+|-------------------|----------------|----------------------------------------------------------------------------------|------------|
+| `code`            | `String`       | The source code string to be highlighted.                                        | (Required) |
+| `language`        | `CodeLanguage` | The programming language to use for syntax analysis (e.g., `KOTLIN`, `JAVA`).    | (Required) |
+| `showLineNumbers` | `Boolean`      | Whether to display line numbers on the left side of the code.                    | `true`     |
+| `modifier`        | `Modifier`     | The modifier to be applied to the CodeView container.                            | `Modifier` |
+| `fontFamily`      | `FontFamily?`  | The font family for the code text. If null, it defaults to FontFamily.Monospace. | `null`     |
 
 ## ⭐ Contributing
 You can see the 👉 [Contributing Guide](https://github.com/komodgn/compose-codeview?tab=contributing-ov-file).

@@ -50,6 +50,7 @@ fun EditorSection(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
+                modifier = Modifier.padding(4.dp),
                 text = "Edit Code",
                 style = MaterialTheme.typography.titleMedium,
             )
@@ -67,8 +68,10 @@ fun EditorSection(
                 fontFamily = LocalAppFontFamily.current,
             ),
             colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.Blue.copy(0.3f),
-                focusedContainerColor = Color.Blue.copy(0.3f),
+                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
+                focusedContainerColor = MaterialTheme.colorScheme.onBackground,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
