@@ -24,33 +24,25 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.komodgn.AppConfig
 import io.github.komodgn.codeview.core.CodeLanguage
+import io.github.komodgn.example.component.DemoTopBar
+import io.github.komodgn.example.section.CodeEditorSection
 import io.github.komodgn.example.section.CodeViewSection
 import io.github.komodgn.example.section.EditorSection
 import io.github.komodgn.example.theme.CodeViewTheme
@@ -59,9 +51,9 @@ import io.github.komodgn.example.util.getInitialCode
 @Composable
 fun App() {
     var isDark by rememberSaveable { mutableStateOf(true) }
+    var selectedComponent by rememberSaveable { mutableStateOf(DemoComponent.CODE_VIEW) }
     var currentLang by remember { mutableStateOf(CodeLanguage.KOTLIN) }
     var userInput by remember { mutableStateOf(getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)) }
-    val scrollState = rememberScrollState()
 
     CodeViewTheme(isDarkTheme = isDark) {
         Scaffold(
@@ -69,29 +61,12 @@ fun App() {
                 .fillMaxSize(),
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .statusBarsPadding()
-                        .navigationBarsPadding()
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "Compose CodeView Demo",
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.background,
-                        modifier = Modifier.padding(8.dp),
-                    )
-                    IconButton(onClick = { isDark = !isDark }) {
-                        Icon(
-                            imageVector = if (isDark) Icons.Default.LightMode else Icons.Default.DarkMode,
-                            contentDescription = "Toggle Theme",
-                            tint = MaterialTheme.colorScheme.background,
-                        )
-                    }
-                }
+                DemoTopBar(
+                    isDark = isDark,
+                    onToggleTheme = { isDark = !isDark },
+                    selectedComponent = selectedComponent,
+                    onComponentSelect = { selectedComponent = it },
+                )
             },
         ) { innerPadding ->
             BoxWithConstraints(
@@ -102,51 +77,64 @@ fun App() {
                     .windowInsetsPadding(WindowInsets.safeDrawing)
                     .imePadding(),
             ) {
-                val isCompact = maxWidth < 600.dp
+                MainContent(
+                    isCompact = maxWidth < 600.dp,
+                    selectedDemoComponent = selectedComponent,
+                    code = userInput,
+                    language = currentLang,
+                    onCodeChange = { userInput = it },
+                    onLanguageChange = { newLang ->
+                        currentLang = newLang
+                        userInput = getInitialCode(newLang, AppConfig.LIBRARY_VERSION)
+                    },
+                )
+            }
+        }
+    }
+}
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState)
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    if (isCompact) {
-                        CodeViewSection(
-                            code = userInput,
-                            language = currentLang,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        EditorSection(
-                            code = userInput,
-                            selectedLanguage = currentLang,
-                            onLanguageChange = { newLang ->
-                                currentLang = newLang
-                                userInput = getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)
-                            },
-                            onValueChange = { userInput = it },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    } else {
-                        Row(modifier = Modifier.fillMaxWidth().padding(16.dp, 0.dp, 16.dp, 0.dp)) {
-                            EditorSection(
-                                code = userInput,
-                                selectedLanguage = currentLang,
-                                onLanguageChange = { newLang ->
-                                    currentLang = newLang
-                                    userInput = getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)
-                                },
-                                onValueChange = { userInput = it },
-                                modifier = Modifier.weight(1f),
-                            )
-                            CodeViewSection(
-                                code = userInput,
-                                language = currentLang,
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
+@Composable
+private fun MainContent(
+    isCompact: Boolean,
+    selectedDemoComponent: DemoComponent,
+    code: String,
+    language: CodeLanguage,
+    onCodeChange: (String) -> Unit,
+    onLanguageChange: (CodeLanguage) -> Unit,
+) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        when (selectedDemoComponent) {
+            DemoComponent.CODE_VIEW -> {
+                if (isCompact) {
+                    CodeViewSection(code, language, Modifier.fillMaxWidth())
+                    EditorSection(code, language, onLanguageChange, onCodeChange, Modifier.fillMaxWidth())
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        EditorSection(code, language, onLanguageChange, onCodeChange, Modifier.weight(1f))
+                        CodeViewSection(code, language, Modifier.weight(1f))
                     }
                 }
+            }
+
+            DemoComponent.CODE_EDITOR -> {
+                CodeEditorSection(
+                    code,
+                    language,
+                    onCodeChange,
+                    selectedLanguage = language,
+                    onLanguageChange = onLanguageChange,
+                )
             }
         }
     }
