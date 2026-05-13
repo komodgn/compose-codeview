@@ -37,6 +37,8 @@ nav:
   - 'CodeView':
       - 'Overview': codeview/overview.md
       - 'Language Support': codeview/languages.md
+  - 'CodeEditor':
+      - 'Overview': codeeditor/overview.md
 
 markdown_extensions:
   - admonition
