@@ -15,7 +15,6 @@
  */
 package io.github.komodgn.codeview.compose
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -24,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import io.github.komodgn.codeview.core.HighlightToken
 import io.github.komodgn.codeview.core.TokenType
 
-@Composable
 fun List<HighlightToken>.toAnnotatedString(code: String): AnnotatedString = buildAnnotatedString {
     append(code)
     this@toAnnotatedString.forEach { token ->
