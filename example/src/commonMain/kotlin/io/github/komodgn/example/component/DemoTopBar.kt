@@ -15,56 +15,96 @@
  */
 package io.github.komodgn.example.component
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.komodgn.example.DemoComponent
 
 @Composable
 fun DemoTopBar(
+    scrollState: ScrollState,
     isDark: Boolean,
     onToggleTheme: () -> Unit,
     selectedComponent: DemoComponent,
     onComponentSelect: (DemoComponent) -> Unit,
 ) {
+    val scrollThreshold = 120f
+    val getCollapseFraction = { (scrollState.value / scrollThreshold).coerceIn(0f, 1f) }
+
+    val isFilterVisible by remember {
+        derivedStateOf { (scrollState.value / scrollThreshold) < 0.9f }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .statusBarsPadding(),
+            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top))
+            .padding(bottom = 8.dp),
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 0.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .height(40.dp)
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = "Compose CodeView Demo",
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .graphicsLayer {
+                        val fraction = getCollapseFraction()
+                        alpha = 1f - fraction
+                        translationY = -20f * fraction
+                    },
+                style = MaterialTheme.typography.titleMedium,
             )
-            IconButton(onClick = onToggleTheme) {
+
+            Text(
+                text = if (selectedComponent == DemoComponent.CODE_VIEW) "CodeView" else "CodeEditor",
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .graphicsLayer {
+                        val fraction = getCollapseFraction()
+                        alpha = fraction
+                        translationY = 20f * (1f - fraction)
+                    },
+                style = MaterialTheme.typography.bodyMedium,
+            )
+
+            IconButton(
+                onClick = onToggleTheme,
+                modifier = Modifier.align(Alignment.CenterEnd),
+            ) {
                 Icon(
                     imageVector = if (isDark) Icons.Default.LightMode else Icons.Default.DarkMode,
                     contentDescription = "Toggle Theme",
@@ -73,37 +113,21 @@ fun DemoTopBar(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            DemoComponent.entries.forEach { component ->
-                val isSelected = selectedComponent == component
-                FilterChip(
-                    selected = isSelected,
-                    onClick = { onComponentSelect(component) },
-                    label = {
-                        Text(
-                            text = when (component) {
-                                DemoComponent.CODE_VIEW -> "CodeView"
-                                DemoComponent.CODE_EDITOR -> "CodeEditor"
-                            },
-                        )
+        if (isFilterVisible) {
+            DemoComponentFilterRow(
+                selectedComponent = selectedComponent,
+                onComponentSelect = onComponentSelect,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .padding(horizontal = 16.dp)
+                    .graphicsLayer {
+                        val fraction = getCollapseFraction()
+                        alpha = (1f - fraction * 2f).coerceIn(0f, 1f)
+                        scaleY = 1f - fraction
+                        translationY = -10f * fraction
                     },
-                    colors = FilterChipDefaults.filterChipColors(
-                        labelColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
-                        selectedLabelColor = MaterialTheme.colorScheme.primary,
-                        selectedContainerColor = MaterialTheme.colorScheme.onPrimary,
-                    ),
-                    border = FilterChipDefaults.filterChipBorder(
-                        enabled = true,
-                        selected = isSelected,
-                        borderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
-                    ),
-                )
-            }
+            )
         }
     }
 }

@@ -15,15 +15,18 @@
  */
 package io.github.komodgn.example
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -34,7 +37,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -50,10 +52,11 @@ import io.github.komodgn.example.util.getInitialCode
 
 @Composable
 fun App() {
+    val scrollState = rememberScrollState()
     var isDark by rememberSaveable { mutableStateOf(true) }
     var selectedComponent by rememberSaveable { mutableStateOf(DemoComponent.CODE_VIEW) }
-    var currentLang by remember { mutableStateOf(CodeLanguage.KOTLIN) }
-    var userInput by remember { mutableStateOf(getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)) }
+    var currentLang by rememberSaveable { mutableStateOf(CodeLanguage.KOTLIN) }
+    var userInput by rememberSaveable { mutableStateOf(getInitialCode(currentLang, AppConfig.LIBRARY_VERSION)) }
 
     CodeViewTheme(isDarkTheme = isDark) {
         Scaffold(
@@ -62,6 +65,7 @@ fun App() {
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             topBar = {
                 DemoTopBar(
+                    scrollState = scrollState,
                     isDark = isDark,
                     onToggleTheme = { isDark = !isDark },
                     selectedComponent = selectedComponent,
@@ -74,10 +78,11 @@ fun App() {
                     .fillMaxSize()
                     .padding(innerPadding)
                     .background(MaterialTheme.colorScheme.background)
-                    .windowInsetsPadding(WindowInsets.safeDrawing)
+                    .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom))
                     .imePadding(),
             ) {
                 MainContent(
+                    scrollState = scrollState,
                     isCompact = maxWidth < 600.dp,
                     selectedDemoComponent = selectedComponent,
                     code = userInput,
@@ -95,6 +100,7 @@ fun App() {
 
 @Composable
 private fun MainContent(
+    scrollState: ScrollState,
     isCompact: Boolean,
     selectedDemoComponent: DemoComponent,
     code: String,
@@ -102,8 +108,6 @@ private fun MainContent(
     onCodeChange: (String) -> Unit,
     onLanguageChange: (CodeLanguage) -> Unit,
 ) {
-    val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
