@@ -35,15 +35,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
 import io.github.komodgn.example.DemoComponent
 
-@Suppress("FrequentlyChangingValue")
 @Composable
 fun DemoTopBar(
     scrollState: ScrollState,
@@ -53,19 +54,23 @@ fun DemoTopBar(
     onComponentSelect: (DemoComponent) -> Unit,
 ) {
     val scrollThreshold = 120f
-    val collapseFraction = (scrollState.value / scrollThreshold).coerceIn(0f, 1f)
+    val getCollapseFraction = { (scrollState.value / scrollThreshold).coerceIn(0f, 1f) }
+
+    val isFilterVisible by remember {
+        derivedStateOf { (scrollState.value / scrollThreshold) < 0.9f }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
             .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top))
-            .padding(bottom = lerp(8.dp, 0.dp, collapseFraction)),
+            .padding(bottom = 8.dp),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(lerp(50.dp, 48.dp, collapseFraction))
+                .height(40.dp)
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center,
         ) {
@@ -76,8 +81,9 @@ fun DemoTopBar(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .graphicsLayer {
-                        alpha = 1f - collapseFraction
-                        translationY = -20f * collapseFraction
+                        val fraction = getCollapseFraction()
+                        alpha = 1f - fraction
+                        translationY = -20f * fraction
                     },
                 style = MaterialTheme.typography.titleMedium,
             )
@@ -88,8 +94,9 @@ fun DemoTopBar(
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .graphicsLayer {
-                        alpha = collapseFraction
-                        translationY = 20f * (1f - collapseFraction)
+                        val fraction = getCollapseFraction()
+                        alpha = fraction
+                        translationY = 20f * (1f - fraction)
                     },
                 style = MaterialTheme.typography.bodyMedium,
             )
@@ -106,20 +113,19 @@ fun DemoTopBar(
             }
         }
 
-        val chipAreaHeight = lerp(48.dp, 0.dp, collapseFraction)
-
-        if (collapseFraction < 0.9f) {
+        if (isFilterVisible) {
             DemoComponentFilterRow(
                 selectedComponent = selectedComponent,
                 onComponentSelect = onComponentSelect,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(chipAreaHeight)
+                    .height(48.dp)
                     .padding(horizontal = 16.dp)
                     .graphicsLayer {
-                        alpha = (1f - collapseFraction * 2f).coerceIn(0f, 1f)
-                        scaleY = 1f - collapseFraction
-                        translationY = -10f * collapseFraction
+                        val fraction = getCollapseFraction()
+                        alpha = (1f - fraction * 2f).coerceIn(0f, 1f)
+                        scaleY = 1f - fraction
+                        translationY = -10f * fraction
                     },
             )
         }
