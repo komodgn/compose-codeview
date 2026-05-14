@@ -83,7 +83,6 @@ fun DemoTopBar(
             )
 
             Text(
-            Text(
                 text = if (selectedComponent == DemoComponent.CODE_VIEW) "CodeView" else "CodeEditor",
                 fontWeight = FontWeight.Bold,
                 fontWeight = FontWeight.Bold,
