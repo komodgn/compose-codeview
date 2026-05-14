@@ -85,7 +85,6 @@ fun DemoTopBar(
             Text(
                 text = if (selectedComponent == DemoComponent.CODE_VIEW) "CodeView" else "CodeEditor",
                 fontWeight = FontWeight.Bold,
-                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .graphicsLayer {
