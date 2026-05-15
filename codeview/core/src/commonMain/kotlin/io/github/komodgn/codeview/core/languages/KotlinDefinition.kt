@@ -23,15 +23,15 @@ object KotlinDefinition : CLikeLanguageDefinition() {
 
     override val keywords = commonKeywords + setOf(
         "fun", "val", "var", "object", "typealias", "when", "by",
-        "internal", "override", "open", "data", "inline", "noinline",
+        "internal", "override", "open", "data", "inline", "enum", "noinline",
         "crossinline", "suspend", "tailrec", "operator", "infix",
         "expect", "actual", "external", "reified", "companion",
     )
 
     override fun getCustomRules(): Map<TokenType, Regex> {
-        val rules = super.getCustomRules().toMutableMap()
-
-        rules[TokenType.STRING] = Regex("\"\"\"[\\s\\S]*?\"\"\"|\".*?\"")
-        return rules
+        return super.getCustomRules() + mapOf(
+            TokenType.STRING to Regex("\"\"\"[\\s\\S]*?\"\"\"|\".*?\""),
+            TokenType.ANNOTATION to commonAnnotationRegex,
+        )
     }
 }

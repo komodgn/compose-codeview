@@ -15,6 +15,7 @@
  */
 package io.github.komodgn.codeview.core.languages
 
+import io.github.komodgn.codeview.core.TokenType
 import io.github.komodgn.codeview.core.languages.base.CLikeLanguageDefinition
 import kotlin.collections.plus
 
@@ -27,4 +28,10 @@ object JavaDefinition : CLikeLanguageDefinition() {
         "enum", "record", "extends", "implements", "throws", "instanceof",
         "assert", "yield", "var", "permits", "non-sealed",
     )
+
+    override fun getCustomRules(): Map<TokenType, Regex> {
+        return super.getCustomRules() + mapOf(
+            TokenType.ANNOTATION to commonAnnotationRegex,
+        )
+    }
 }
