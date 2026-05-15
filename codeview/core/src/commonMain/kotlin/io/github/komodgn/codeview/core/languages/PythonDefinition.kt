@@ -15,6 +15,7 @@
  */
 package io.github.komodgn.codeview.core.languages
 
+import io.github.komodgn.codeview.core.TokenType
 import io.github.komodgn.codeview.core.languages.base.ScriptLanguageDefinition
 
 object PythonDefinition : ScriptLanguageDefinition() {
@@ -25,4 +26,10 @@ object PythonDefinition : ScriptLanguageDefinition() {
         "with", "as", "pass", "import", "from", "lambda", "assert",
         "is", "not", "and", "or", "global", "nonlocal", "del",
     )
+
+    override fun getCustomRules(): Map<TokenType, Regex> {
+        return super.getCustomRules() + mapOf(
+            TokenType.ANNOTATION to Regex("""@\w+(?:\.\w+)*"""),
+        )
+    }
 }

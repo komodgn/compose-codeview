@@ -25,6 +25,8 @@ abstract class CLikeLanguageDefinition : LanguageDefinition {
         "this", "super", "true", "false", "null", "new", "instanceof", "is", "as", "in",
     )
 
+    protected val commonAnnotationRegex = Regex("""@\w+(?:\.\w+)*""")
+
     override fun getCustomRules(): Map<TokenType, Regex> = mapOf(
         TokenType.COMMENT to Regex("//.*|/\\*[\\s\\S]*?\\*/"),
         TokenType.STRING to Regex("\".*?\""),
