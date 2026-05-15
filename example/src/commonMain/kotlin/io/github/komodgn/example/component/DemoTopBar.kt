@@ -70,7 +70,7 @@ fun DemoTopBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.dp)
+                .height(48.dp)
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center,
         ) {
