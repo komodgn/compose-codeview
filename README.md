@@ -22,6 +22,17 @@
     - [CodeEditor](#22-codeeditor)
 - [Contributing](#-contributing)
 
+## Supported Platforms
+This project is built with Kotlin Multiplatform, providing support for the following targets:
+
+| Platform | SourceSet | Support |
+| :--- | :--- | :---: |
+| **Android** | `androidMain` | ✅ |
+| **iOS** | `iosMain` | ✅ |
+| **Web (JS)** | `jsMain` | ✅ |
+| **Web (Wasm)** | `wasmJsMain` | ✅ |
+| **Common** | `commonMain` | ✅ |
+
 ## 1. Setup
 Add the dependency below to your module's build.gradle.kts file.
 

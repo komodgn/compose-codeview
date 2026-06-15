@@ -15,11 +15,17 @@
  */
 package io.github.komodgn.codeview.compose
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import io.github.komodgn.codeview.compose.theme.Gray
+import io.github.komodgn.codeview.compose.theme.LightOrange
+import io.github.komodgn.codeview.compose.theme.Orange
+import io.github.komodgn.codeview.compose.theme.Red
+import io.github.komodgn.codeview.compose.theme.SkyBlue
+import io.github.komodgn.codeview.compose.theme.White
+import io.github.komodgn.codeview.compose.theme.Yellow
 import io.github.komodgn.codeview.core.HighlightToken
 import io.github.komodgn.codeview.core.TokenType
 
@@ -28,19 +34,21 @@ fun List<HighlightToken>.toAnnotatedString(code: String): AnnotatedString = buil
     this@toAnnotatedString.forEach { token ->
         val color = when (token.type) {
             TokenType.KEYWORD -> SpanStyle(
-                color = Color(0xFFFF7B72),
+                color = Red,
                 fontWeight = FontWeight.Bold,
             )
 
-            TokenType.TYPE -> SpanStyle(color = Color(0xFFFFA657))
+            TokenType.ANNOTATION -> SpanStyle(color = Yellow)
 
-            TokenType.FUNCTION -> SpanStyle(color = Color(0xFFD2A8FF))
+            TokenType.TYPE -> SpanStyle(color = LightOrange)
 
-            TokenType.STRING -> SpanStyle(color = Color(0xFFA5D6FF))
+            TokenType.FUNCTION -> SpanStyle(color = Orange)
 
-            TokenType.COMMENT -> SpanStyle(color = Color(0xFF8B949E))
+            TokenType.STRING -> SpanStyle(color = SkyBlue)
 
-            TokenType.PLAIN -> SpanStyle(color = Color(0xFFC9D1D9))
+            TokenType.COMMENT -> SpanStyle(color = Gray)
+
+            TokenType.PLAIN -> SpanStyle(color = White)
         }
 
         if (token.range.first >= 0 && token.range.last < code.length) {
